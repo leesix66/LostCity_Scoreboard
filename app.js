@@ -1,11 +1,11 @@
 import { calculateExpedition, calculatePlayerRound } from './scoring.js';
 
 const COLORS = [
-  { id: 'red', name: '화산', symbol: '▲' },
-  { id: 'blue', name: '심해', symbol: '≋' },
-  { id: 'green', name: '밀림', symbol: '✦' },
-  { id: 'yellow', name: '사막', symbol: '◆' },
-  { id: 'white', name: '설산', symbol: '△' },
+  { id: 'yellow', name: '사막', symbol: '●' },
+  { id: 'blue', name: '아틀란티스', symbol: '◉' },
+  { id: 'purple', name: '미지의 강가', symbol: '◆' },
+  { id: 'green', name: '열대 우림', symbol: '▲' },
+  { id: 'red', name: '협곡', symbol: '◎' },
 ];
 const NUMBERS = [2, 3, 4, 5, 6, 7, 8, 9, 10];
 const STORAGE_KEY = 'lost-cities-scorekeeper-v1';
@@ -22,7 +22,15 @@ const defaultState = () => ({
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (saved?.players?.length === 2 && saved?.totals?.length === 2) return saved;
+    if (saved?.players?.length === 2 && saved?.totals?.length === 2) {
+      // 이전 버전에서 양쪽에 같은 카드가 입력된 경우 첫 번째 선택만 유지한다.
+      saved.players[0].forEach((expedition, colorIndex) => {
+        const claimedNumbers = new Set(expedition.numbers);
+        saved.players[1][colorIndex].numbers = saved.players[1][colorIndex].numbers
+          .filter((number) => !claimedNumbers.has(number));
+      });
+      return saved;
+    }
   } catch { /* 손상된 저장 데이터는 새 게임으로 대체 */ }
   return defaultState();
 }
@@ -41,7 +49,9 @@ function scoreForPlayer(playerIndex) {
 
 function cardButton(playerIndex, colorIndex, number) {
   const selected = state.players[playerIndex][colorIndex].numbers.includes(number);
-  return `<button type="button" class="card-number${selected ? ' selected' : ''}" data-action="number" data-player="${playerIndex}" data-color="${colorIndex}" data-number="${number}" aria-pressed="${selected}">${number}</button>`;
+  const ownedByOpponent = state.players[1 - playerIndex][colorIndex].numbers.includes(number);
+  const unavailable = ownedByOpponent && !selected;
+  return `<button type="button" class="card-number${selected ? ' selected' : ''}${unavailable ? ' unavailable' : ''}" data-action="number" data-player="${playerIndex}" data-color="${colorIndex}" data-number="${number}" aria-pressed="${selected}"${unavailable ? ' disabled aria-label="상대가 선택한 카드"' : ''}>${number}</button>`;
 }
 
 function playerCards(playerIndex, colorIndex) {
@@ -110,6 +120,7 @@ expeditionsEl.addEventListener('click', (event) => {
 
   if (button.dataset.action === 'number') {
     const number = Number(button.dataset.number);
+    if (state.players[1 - player][color].numbers.includes(number)) return;
     expedition.numbers = expedition.numbers.includes(number)
       ? expedition.numbers.filter((item) => item !== number)
       : [...expedition.numbers, number].sort((a, b) => a - b);
