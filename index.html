@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#10221b" />
+    <meta name="description" content="로스트 시티 2인용 실시간 점수 계산기" />
+    <title>Lost Cities · Scorekeeper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Unbounded:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">⌁</span>
+          <div><p>EXPEDITION SCOREKEEPER</p><h1>LOST CITIES</h1></div>
+        </div>
+        <button class="icon-button" id="rulesButton" type="button" aria-label="점수 규칙 보기">?</button>
+      </header>
+
+      <main>
+        <section class="scoreboard" aria-label="현재 점수">
+          <div class="player-score player-one">
+            <label><span class="sr-only">첫 번째 플레이어 이름</span><input id="player0Name" value="탐험가 1" maxlength="12" /></label>
+            <strong id="player0RoundScore">0</strong>
+            <span>누적 <b id="player0TotalScore">0</b></span>
+          </div>
+          <div class="round-badge"><span>ROUND</span><strong id="roundNumber">1</strong></div>
+          <div class="player-score player-two">
+            <label><span class="sr-only">두 번째 플레이어 이름</span><input id="player1Name" value="탐험가 2" maxlength="12" /></label>
+            <strong id="player1RoundScore">0</strong>
+            <span>누적 <b id="player1TotalScore">0</b></span>
+          </div>
+        </section>
+
+        <div class="guide-row" aria-hidden="true"><span>탐험가 1의 카드</span><span>탐험가 2의 카드</span></div>
+        <section id="expeditions" class="expeditions" aria-label="탐험 카드 입력"></section>
+
+        <section class="round-history" id="historySection" hidden>
+          <div class="section-heading"><h2>라운드 기록</h2><button id="undoRoundButton" class="text-button" type="button">마지막 라운드 취소</button></div>
+          <div id="historyList"></div>
+        </section>
+      </main>
+
+      <footer class="action-dock">
+        <button id="resetButton" class="secondary-action" type="button">전체 초기화</button>
+        <button id="finishRoundButton" class="primary-action" type="button"><span>라운드 종료</span><small>점수 저장 후 다음 라운드</small></button>
+      </footer>
+    </div>
+
+    <dialog id="rulesDialog">
+      <div class="dialog-head"><div><span>SCORING GUIDE</span><h2>점수 계산 규칙</h2></div><button id="closeRulesButton" class="icon-button" type="button" aria-label="닫기">×</button></div>
+      <ol>
+        <li>시작한 색상마다 숫자 카드의 합에서 탐험 비용 <b>20점</b>을 뺍니다.</li>
+        <li>투자 카드가 있다면 결과를 <b>×2 / ×3 / ×4</b>로 계산합니다.</li>
+        <li>투자 카드를 포함해 한 색상에 <b>8장 이상</b> 놓았다면 마지막에 <b>+20점</b>을 받습니다.</li>
+        <li>시작하지 않은 색상은 0점입니다. 모든 라운드 점수를 합산해 승자를 정합니다.</li>
+      </ol>
+      <p class="formula">(숫자 합 − 20) × (투자 카드 + 1) <em>+ 8장 보너스 20</em></p>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
