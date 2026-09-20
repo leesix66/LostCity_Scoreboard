@@ -51,6 +51,11 @@ function scoreForPlayer(playerIndex) {
   return calculatePlayerRound(state.players[playerIndex]);
 }
 
+function resizeNameInput(input) {
+  input.style.height = 'auto';
+  input.style.height = `${Math.min(input.scrollHeight, 82)}px`;
+}
+
 function cardButton(playerIndex, colorIndex, number) {
   const selected = state.players[playerIndex][colorIndex].numbers.includes(number);
   const ownedByOpponent = state.players[1 - playerIndex][colorIndex].numbers.includes(number);
@@ -88,6 +93,7 @@ function renderScores() {
     if (document.activeElement !== nameInput) {
       nameInput.value = formatPlayerName(state.names[player], state.prefixes[player]);
     }
+    resizeNameInput(nameInput);
     document.querySelector(`#player${player}Guide`).textContent = `${state.names[player] || `플레이어 ${player + 1}`}의 카드`;
   }
   document.querySelector('#roundNumber').textContent = state.round;
@@ -143,10 +149,12 @@ for (let player = 0; player < 2; player += 1) {
   nameInput.addEventListener('focus', (event) => {
     event.target.value = state.names[player];
     event.target.dataset.previousName = state.names[player];
+    resizeNameInput(event.target);
     event.target.select();
   });
   nameInput.addEventListener('input', (event) => {
     state.names[player] = event.target.value;
+    resizeNameInput(event.target);
     saveState();
   });
   nameInput.addEventListener('keydown', (event) => {

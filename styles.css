@@ -34,16 +34,16 @@ button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 .brand h1 { margin: 0; color: #6d310a; font: 400 22px/1 'Black Han Sans', sans-serif; letter-spacing: -.03em; text-shadow: 0 1px #fff4d4; }
 .icon-button { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 1px solid rgba(85, 48, 17, .22); border-radius: 50%; color: #6f3d15; background: rgba(255, 244, 216, .72); box-shadow: 0 2px 8px rgba(79, 42, 8, .09); font-weight: 800; cursor: pointer; }
 
-.scoreboard { position: sticky; top: 8px; z-index: 10; display: grid; grid-template-columns: 1fr 58px 1fr; align-items: center; min-height: 116px; padding: 14px 12px; overflow: hidden; border: 1px solid rgba(255, 226, 170, .22); border-radius: 20px; background: linear-gradient(135deg, rgba(67, 34, 16, .97), rgba(105, 57, 20, .97)), url('/assets/lost-cities-cover.png') center 45% / cover; box-shadow: 0 15px 35px rgba(87, 45, 10, .28), inset 0 1px rgba(255, 255, 255, .1); backdrop-filter: blur(16px); }
+.scoreboard { position: sticky; top: 8px; z-index: 10; display: grid; grid-template-columns: 1fr 58px 1fr; align-items: center; min-height: 148px; padding: 14px 12px; overflow: hidden; border: 1px solid rgba(255, 226, 170, .22); border-radius: 20px; background: linear-gradient(135deg, rgba(67, 34, 16, .97), rgba(105, 57, 20, .97)), url('/assets/lost-cities-cover.png') center 45% / cover; box-shadow: 0 15px 35px rgba(87, 45, 10, .28), inset 0 1px rgba(255, 255, 255, .1); backdrop-filter: blur(16px); }
 .scoreboard::after { content: ''; position: absolute; inset: 0; opacity: .14; background: url('/assets/lost-cities-cover.png') center 47% / cover; pointer-events: none; }
 .scoreboard > * { position: relative; z-index: 1; }
 .player-score { min-width: 0; text-align: center; }
-.name-row { position: relative; width: 100%; }
+.name-row { position: relative; width: 100%; min-height: 45px; }
 .name-row label { display: block; width: 100%; }
-.player-score input { width: 100%; padding: 3px 24px 3px 4px; border: 0; border-bottom: 1px dashed rgba(255, 239, 204, .28); outline: 0; color: #f9e8c6; background: transparent; text-align: center; font-size: clamp(8px, 2.6vw, 11px); font-weight: 700; }
-.player-score input::placeholder { color: #d5b987; opacity: .82; }
-.player-score input:focus { border-bottom-color: #ffd476; background: rgba(255, 255, 255, .07); }
-.reroll-button { position: absolute; top: 50%; right: 1px; display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 1px solid rgba(255, 237, 198, .2); border-radius: 50%; color: #f2cd83; background: rgba(255, 255, 255, .08); font-size: 13px; line-height: 1; cursor: pointer; transform: translateY(-50%); }
+.player-score input, .player-score textarea { display: block; width: 100%; min-height: 45px; max-height: 82px; padding: 5px 25px 5px 4px; border: 0; border-bottom: 1px dashed rgba(255, 239, 204, .28); outline: 0; color: #f9e8c6; background: transparent; resize: none; overflow: hidden; text-align: center; font-size: clamp(11px, 3.4vw, 15px); font-weight: 800; line-height: 1.18; }
+.player-score input::placeholder, .player-score textarea::placeholder { color: #d5b987; opacity: .82; }
+.player-score input:focus, .player-score textarea:focus { border-bottom-color: #ffd476; background: rgba(255, 255, 255, .07); }
+.reroll-button { position: absolute; top: 4px; right: 1px; display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 1px solid rgba(255, 237, 198, .2); border-radius: 50%; color: #f2cd83; background: rgba(255, 255, 255, .08); font-size: 14px; line-height: 1; cursor: pointer; }
 .player-score > strong { display: block; margin: 2px 0 0; font: 700 clamp(29px, 9vw, 42px)/1 'Unbounded', sans-serif; letter-spacing: -.06em; }
 .player-score > span { display: inline-block; margin-top: 6px; padding: 3px 8px; border-radius: 10px; color: #c9b28c; background: rgba(255, 255, 255, .07); font-size: 10px; }
 .player-score > span b { color: #fff7e6; }
