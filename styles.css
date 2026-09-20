@@ -47,8 +47,8 @@ button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 .player-score input:focus, .player-score textarea:focus { border-bottom-color: #ffd476; background: rgba(255, 255, 255, .07); }
 .reroll-button { display: grid; flex: 0 0 24px; place-items: center; width: 24px; height: 24px; padding: 0; border: 1px solid rgba(255, 237, 198, .2); border-radius: 50%; color: #f2cd83; background: rgba(255, 255, 255, .08); font-size: 14px; line-height: 1; cursor: pointer; }
 .player-score > strong { display: block; margin: 2px 0 0; font: 700 clamp(29px, 9vw, 42px)/1 'Unbounded', sans-serif; letter-spacing: -.06em; }
-.player-score > span { display: inline-block; margin-top: 6px; padding: 3px 8px; border-radius: 10px; color: #c9b28c; background: rgba(255, 255, 255, .07); font-size: 10px; }
-.player-score > span b { color: #fff7e6; }
+.player-score > span { display: inline-block; margin-top: 6px; padding: 4px 10px; border-radius: 11px; color: #d8bd8e; background: rgba(255, 255, 255, .1); font-size: 11px; }
+.player-score > span b { color: #fff7e6; font-size: 16px; line-height: 1; }
 .player-one > strong { color: #ffc353; }
 .player-two > strong { color: #70d4e7; }
 .round-badge { text-align: center; color: #b99d75; }
