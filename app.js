@@ -1,5 +1,5 @@
 import { calculateExpedition, calculatePlayerRound } from './scoring.js';
-import { formatPlayerName, pickRandomPrefix } from './prefixes.js';
+import { pickRandomPrefix } from './prefixes.js';
 
 const COLORS = [
   { id: 'yellow', name: '사막', symbol: '●' },
@@ -91,8 +91,9 @@ function renderScores() {
     document.querySelector(`#player${player}TotalScore`).textContent = signed(state.totals[player] + roundScores[player]);
     const nameInput = document.querySelector(`#player${player}Name`);
     if (document.activeElement !== nameInput) {
-      nameInput.value = formatPlayerName(state.names[player], state.prefixes[player]);
+      nameInput.value = state.names[player];
     }
+    document.querySelector(`#player${player}Prefix`).textContent = state.prefixes[player];
     resizeNameInput(nameInput);
     document.querySelector(`#player${player}Guide`).textContent = `${state.names[player] || `플레이어 ${player + 1}`}의 카드`;
   }
