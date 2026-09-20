@@ -1,4 +1,5 @@
 import { calculateExpedition, calculatePlayerRound } from './scoring.js';
+import { formatPlayerName, pickRandomPrefix } from './prefixes.js';
 
 const COLORS = [
   { id: 'yellow', name: '사막', symbol: '●' },
@@ -13,7 +14,8 @@ const STORAGE_KEY = 'lost-cities-scorekeeper-v1';
 const emptyExpeditions = () => COLORS.map(() => ({ numbers: [], wagers: 0 }));
 const defaultState = () => ({
   round: 1,
-  names: ['탐험가 1', '탐험가 2'],
+  names: ['', ''],
+  prefixes: ['', ''],
   totals: [0, 0],
   players: [emptyExpeditions(), emptyExpeditions()],
   history: [],
@@ -23,6 +25,8 @@ function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (saved?.players?.length === 2 && saved?.totals?.length === 2) {
+      saved.names = saved.names.map((name, player) => name === `탐험가 ${player + 1}` ? '' : name);
+      saved.prefixes = Array.isArray(saved.prefixes) ? saved.prefixes : ['', ''];
       // 이전 버전에서 양쪽에 같은 카드가 입력된 경우 첫 번째 선택만 유지한다.
       saved.players[0].forEach((expedition, colorIndex) => {
         const claimedNumbers = new Set(expedition.numbers);
@@ -81,7 +85,10 @@ function renderScores() {
     document.querySelector(`#player${player}RoundScore`).textContent = signed(roundScores[player]);
     document.querySelector(`#player${player}TotalScore`).textContent = signed(state.totals[player] + roundScores[player]);
     const nameInput = document.querySelector(`#player${player}Name`);
-    if (document.activeElement !== nameInput) nameInput.value = state.names[player];
+    if (document.activeElement !== nameInput) {
+      nameInput.value = formatPlayerName(state.names[player], state.prefixes[player]);
+    }
+    document.querySelector(`#player${player}Guide`).textContent = `${state.names[player] || `플레이어 ${player + 1}`}의 카드`;
   }
   document.querySelector('#roundNumber').textContent = state.round;
 }
@@ -132,9 +139,39 @@ expeditionsEl.addEventListener('click', (event) => {
 });
 
 for (let player = 0; player < 2; player += 1) {
-  document.querySelector(`#player${player}Name`).addEventListener('input', (event) => {
-    state.names[player] = event.target.value || `탐험가 ${player + 1}`;
+  const nameInput = document.querySelector(`#player${player}Name`);
+  nameInput.addEventListener('focus', (event) => {
+    event.target.value = state.names[player];
+    event.target.dataset.previousName = state.names[player];
+    event.target.select();
+  });
+  nameInput.addEventListener('input', (event) => {
+    state.names[player] = event.target.value;
     saveState();
+  });
+  nameInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') event.target.blur();
+  });
+  nameInput.addEventListener('blur', (event) => {
+    const name = event.target.value.trim();
+    const changed = name !== event.target.dataset.previousName;
+    state.names[player] = name;
+    if (!name) state.prefixes[player] = '';
+    else if (changed || !state.prefixes[player]) state.prefixes[player] = pickRandomPrefix(Math.random, state.prefixes[player]);
+    renderScores();
+    saveState();
+  });
+
+  document.querySelector(`[data-reroll-player="${player}"]`).addEventListener('click', () => {
+    if (!state.names[player]) {
+      nameInput.focus();
+      showToast('이름을 먼저 입력해 주세요');
+      return;
+    }
+    state.prefixes[player] = pickRandomPrefix(Math.random, state.prefixes[player]);
+    renderScores();
+    saveState();
+    showToast(`${state.names[player]}의 별명을 다시 뽑았습니다`);
   });
 }
 
@@ -166,8 +203,10 @@ document.querySelector('#undoRoundButton').addEventListener('click', () => {
 document.querySelector('#resetButton').addEventListener('click', () => {
   if (!window.confirm('모든 라운드와 점수를 지우고 새 게임을 시작할까요?')) return;
   const names = state.names;
+  const prefixes = state.prefixes;
   state = defaultState();
   state.names = names;
+  state.prefixes = prefixes;
   render();
   showToast('새 게임을 시작합니다');
 });

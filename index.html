@@ -24,19 +24,19 @@
       <main>
         <section class="scoreboard" aria-label="현재 점수">
           <div class="player-score player-one">
-            <label><span class="sr-only">첫 번째 플레이어 이름</span><input id="player0Name" value="탐험가 1" maxlength="12" /></label>
+            <div class="name-row"><label><span class="sr-only">첫 번째 플레이어 이름</span><input id="player0Name" value="" placeholder="이름 입력" maxlength="12" /></label><button class="reroll-button" type="button" data-reroll-player="0" aria-label="첫 번째 플레이어 별명 다시 뽑기">↻</button></div>
             <strong id="player0RoundScore">0</strong>
             <span>누적 <b id="player0TotalScore">0</b></span>
           </div>
           <div class="round-badge"><span>ROUND</span><strong id="roundNumber">1</strong></div>
           <div class="player-score player-two">
-            <label><span class="sr-only">두 번째 플레이어 이름</span><input id="player1Name" value="탐험가 2" maxlength="12" /></label>
+            <div class="name-row"><label><span class="sr-only">두 번째 플레이어 이름</span><input id="player1Name" value="" placeholder="이름 입력" maxlength="12" /></label><button class="reroll-button" type="button" data-reroll-player="1" aria-label="두 번째 플레이어 별명 다시 뽑기">↻</button></div>
             <strong id="player1RoundScore">0</strong>
             <span>누적 <b id="player1TotalScore">0</b></span>
           </div>
         </section>
 
-        <div class="guide-row" aria-hidden="true"><span>탐험가 1의 카드</span><b>같은 카드는 한 장뿐</b><span>탐험가 2의 카드</span></div>
+        <div class="guide-row" aria-hidden="true"><span id="player0Guide">플레이어 1의 카드</span><b>같은 카드는 한 장뿐</b><span id="player1Guide">플레이어 2의 카드</span></div>
         <section id="expeditions" class="expeditions" aria-label="탐험 카드 입력"></section>
 
         <section class="round-history" id="historySection" hidden>
