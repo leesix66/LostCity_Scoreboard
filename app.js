@@ -1,5 +1,6 @@
 import { calculateExpedition, calculatePlayerRound } from './scoring.js';
 import { pickRandomPrefix } from './prefixes.js';
+import { inject } from '@vercel/analytics';
 
 const COLORS = [
   { id: 'yellow', name: '사막', symbol: '●' },
@@ -228,3 +229,4 @@ rulesDialog.addEventListener('click', (event) => {
 });
 
 render();
+inject();
